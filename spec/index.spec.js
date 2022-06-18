@@ -1,3 +1,3 @@
-it('Primeiro teste', () => {
-  expect(true).toBe(true)
+it('Parser eh definido no escopo global', () => {
+  expect(window.__parser).toBeDefined()
 })
