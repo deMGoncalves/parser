@@ -1,5 +1,3 @@
-window.__parser = (window.parser || {})
-
 ;(() => {
   const cache = new Map()
 
@@ -11,10 +9,10 @@ window.__parser = (window.parser || {})
           : (cache.set(key, target(...args)), cache.get(key))
       ))(JSON.stringify(args))
 
-  const createElement = memoize((tagName, is) => (
+  const createElement = memoize((tagName, is, className) => (
     new DOMParser()
       .parseFromString(
-        `<${tagName} ${is} />`,
+        `<${tagName} ${is} ${className} />`,
         'text/html'
       )
       .body
@@ -22,14 +20,20 @@ window.__parser = (window.parser || {})
   ))
 
   const mountIs = memoize((is) => (
-    is ? `is=${is}` : ''
+    is ? `is="${is}"` : ''
   ))
 
+  const mountClassName = memoize((className) => (
+    className ? `class="${className}"` : ''
+  ))
+
+  window.__parser = (window.__parser || {})
   window.__parser.mount = (ast) => {
     const { attributes, className, children, events, is, tagName } = ast
     const element = createElement(
       tagName,
-      mountIs(is)
+      mountIs(is),
+      mountClassName(className)
     )
 
     return element.cloneNode(true)
