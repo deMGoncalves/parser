@@ -12,4 +12,16 @@ describe('__parser.mount', () => {
 
     expect(element.tagName).toBe('DIV')
   })
+
+  it('Deve extender o elemento para o web component em is', () => {
+    const ast = {
+      tagName: 'p',
+      is: 'word-count'
+    }
+
+    const element = __parser.mount(ast)
+
+    expect(element.tagName).toBe('P')
+    expect(element.getAttribute('is')).toBe('word-count')
+  })
 })
